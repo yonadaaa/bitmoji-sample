@@ -65,15 +65,13 @@
         android:id="@+id/input_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/input_bar_height"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/bitmoji_button"
             android:layout_width="@dimen/input_bar_height"
             android:layout_height="match_parent"
-            android:padding="@dimen/item_margin"
-            />
+            android:padding="@dimen/item_margin" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -93,7 +91,7 @@
                 android:inputType="text"
                 android:paddingStart="@dimen/input_horizonal_padding"
                 android:paddingEnd="@dimen/input_field_height"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/send_button"
@@ -111,7 +109,6 @@
     <FrameLayout
         android:id="@+id/sdk_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bitmoji_container_height"
-        />
+        android:layout_height="@dimen/bitmoji_container_height" />
 
 </LinearLayout>

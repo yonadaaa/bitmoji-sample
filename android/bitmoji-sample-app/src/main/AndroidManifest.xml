@@ -19,7 +19,7 @@
         <meta-data android:name="com.snapchat.kit.sdk.scopes" android:resource="@array/snap_connect_scopes" />
 
         <activity
-            android:name=".TestAppActivity"
+            android:name=".TitleActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustNothing"
             >
@@ -27,6 +27,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".TestAppActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustNothing"
+            >
         </activity>
 
         <activity

@@ -39,6 +39,8 @@ import com.snapchat.kit.sdk.core.controller.LoginStateController;
 import com.snapchat.kit.sdk.login.models.UserDataResponse;
 import com.snapchat.kit.sdk.login.networking.FetchUserDataCallback;
 
+import java.util.Random;
+
 
 public class TestAppActivity extends AppCompatActivity implements
         OnBitmojiSelectedListener,
@@ -113,9 +115,17 @@ public class TestAppActivity extends AppCompatActivity implements
         mFriendmojiToggle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                String danielsID = "CAESIEtR2/E5Hs7eJGsIr58KBn1Bkdm2qxUoDtS/O2bER8CB";
+                //mTextField.setText(mMyExternalId);
+                //sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, mMyExternalId),1000);
+                //sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, danielsID),1000);
+
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
                 if (fragment instanceof BitmojiFragment) {
-                    ((BitmojiFragment) fragment).setFriend(mShowingFriendmoji ? null : mMyExternalId);
+                    ((BitmojiFragment) fragment).setFriend(mShowingFriendmoji ? null : danielsID);
+                    String[] themes = new String[]{"dance","food","walk","party","shower","sex"};
+                    int index = new Random().nextInt(themes.length);
+                    ((BitmojiFragment) fragment).setSearchText(themes[index]);
                 }
                 mShowingFriendmoji = !mShowingFriendmoji;
             }
@@ -149,8 +159,8 @@ public class TestAppActivity extends AppCompatActivity implements
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.sdk_container, BitmojiFragment.builder()
-                        .withShowSearchBar(true)
-                        .withShowSearchPills(true)
+                        .withShowSearchBar(false)
+                        .withShowSearchPills(false)
                         .withTheme(R.style.MyBitmojiTheme)
                         .build())
                 .commit();
@@ -163,6 +173,12 @@ public class TestAppActivity extends AppCompatActivity implements
         }
         sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "Welcome to Doing BitsMoji!"), 500);
         sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.kissy),1000);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
+        if (fragment instanceof BitmojiFragment) {
+            sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.chill),1000);
+            ((BitmojiFragment) fragment).setSearchText("car");
+        }
 
     }
 
@@ -264,7 +280,7 @@ public class TestAppActivity extends AppCompatActivity implements
 
     private void setBitmojiVisible(boolean isBitmojiVisible) {
         mIsBitmojiVisible = isBitmojiVisible;
-        mBitmojiContainer.setVisibility(isBitmojiVisible ? View.VISIBLE : View.GONE);
+        //mBitmojiContainer.setVisibility(isBitmojiVisible ? View.VISIBLE : View.GONE);
     }
 
     private void defocusInput() {
@@ -283,7 +299,7 @@ public class TestAppActivity extends AppCompatActivity implements
         sendMessage(new ChatImageUrlMessage(true /*isFromMe*/, imageUrl, previewDrawable));
 
         if (mBitmojisSent == 0) {
-            sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "WOAAAAAH, cool Bitmoji!"), 500);
+            sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "WOAAAAAH, cool car Bitmoji!"), 500);
             sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),1000);
         } else if (mBitmojisSent == 1) {
             sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.party_time),1000);
