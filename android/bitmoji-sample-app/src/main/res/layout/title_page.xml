@@ -32,4 +32,17 @@
         android:text="Go on a Date"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/holo_purple" />
+
+    <TextView
+        android:id="@+id/unlink_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:padding="@dimen/item_margin"
+        android:text="@string/unlink"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="30sp"
+        android:visibility="visible" />
+
 </LinearLayout>
