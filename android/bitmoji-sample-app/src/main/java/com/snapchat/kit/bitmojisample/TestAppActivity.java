@@ -46,6 +46,8 @@ public class TestAppActivity extends AppCompatActivity implements
     private int mBaseRootViewHeightDiff = 0;
     private String mMyExternalId;
     private String theme;
+    private String friendID = "CAESIEtR2/E5Hs7eJGsIr58KBn1Bkdm2qxUoDtS/O2bER8CB";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,14 +82,17 @@ public class TestAppActivity extends AppCompatActivity implements
             loadExternalId();
         }
 
+        // Theme for Adventure picked at random from array
         String[] themes = new String[]{"dance","food","party","sleep","music","football","soccer","school","gym","meme"};
         int index = new Random().nextInt(themes.length);
         theme = themes[index];
 
+        // Begin adventure with photo of activity and text explanation
         String dancingURL = "https://sdk.bitmoji.com/render/panel/10212299-AWZlaHV3jILgfDP~yNdASBPh1gM19g-AWZlaHV3GUkpI8Rr~8UB38X2weMOyQ-v1.png?transparent=1&palette=1";
-        if (Build.VERSION.SDK_INT >= 21) sendMessage(new ChatImageUrlMessage(false /*isFromMe*/, dancingURL, getDrawable(R.drawable.looking_good)));
+        sendMessage(new ChatImageUrlMessage(false /*isFromMe*/, dancingURL, Drawable.createFromPath("")));
         sendMessage(new ChatTextMessage(false /*isFromMe*/, "On your Adventure, you and Daniel are going to " + theme +"!"));
 
+        // Activate sticker keyboard and filter
         delayFilter(2000);
         delayKeyboard(0);
     }
@@ -113,7 +118,6 @@ public class TestAppActivity extends AppCompatActivity implements
 
     @Override
     public void onBitmojiSelected(String imageUrl, Drawable previewDrawable) {
-        setBitmojiVisible(false);
         handleBitmojiSend(imageUrl, previewDrawable);
     }
 
@@ -154,11 +158,21 @@ public class TestAppActivity extends AppCompatActivity implements
     }
 
     private void handleBitmojiSend(String imageUrl, Drawable previewDrawable) {
+        // If they have picked a sticker hide the keyboard
         setBitmojiVisible(false);
+        // Send sticker by URL selected
         sendMessage(new ChatImageUrlMessage(true /*isFromMe*/, imageUrl, previewDrawable));
 
-        sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),3000);
+        //Reactivate keyboard
         delayKeyboard(3500);
+    }
+
+    private void respond(){
+        String imageUrl = "";
+        // basically imageURL will just be a random url under that theme. Maybe like basketball.txt?
+
+        //Send reply with 3 second delay
+        sendMessage(new ChatImageUrlMessage(false /*isFromMe*/, imageUrl , Drawable.createFromPath("")));
     }
 
     private void sendMessage(ChatMessage message) {
@@ -179,13 +193,12 @@ public class TestAppActivity extends AppCompatActivity implements
         mContentView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                String danielsID = "CAESIEtR2/E5Hs7eJGsIr58KBn1Bkdm2qxUoDtS/O2bER8CB";
 
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
                 if (fragment instanceof BitmojiFragment) {
-                    ((BitmojiFragment) fragment).setFriend(danielsID);
+                    ((BitmojiFragment) fragment).setFriend(friendID);
                     ((BitmojiFragment) fragment).setSearchText(theme);
-                    //((BitmojiFragment) fragment).setSearchText(themes[index]);
+                    fragment.getString(0);
                 }
             }
         }, delayMs);

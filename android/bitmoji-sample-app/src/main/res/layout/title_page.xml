@@ -1,59 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/title_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/profileView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/send_inactive" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Doing BitsMoji"
         android:textColor="@android:color/holo_orange_light"
-        android:textSize="30sp" />
+        android:textSize="36sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/titleImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
-        android:src="@drawable/kissy" />
+        android:src="@drawable/kissy"
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/datebutton"
+        android:id="@+id/adventureButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
         android:text="Go on an Adventure"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@android:color/holo_purple" />
+        android:textColor="@android:color/holo_purple"
+        app:layout_constraintTop_toBottomOf="@+id/titleImage"
+        tools:layout_editor_absoluteX="16dp" />
 
     <TextView
-        android:id="@+id/unlink_button"
-        android:layout_width="match_parent"
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:padding="@dimen/item_margin"
         android:text="@string/unlink"
-        android:textAlignment="center"
+        android:textAlignment="textEnd"
         android:textColor="@android:color/holo_red_light"
         android:textSize="24sp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="18sp" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/chill" />
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

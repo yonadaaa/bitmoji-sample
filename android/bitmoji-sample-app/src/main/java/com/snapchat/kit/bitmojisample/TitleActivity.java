@@ -22,6 +22,7 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
 
     private ImageView mBitmojiImageView;
     private TextView mNameTextView;
+    private String mMyExternalId = "AKJFKDFJD";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,9 +54,6 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
 
     private void nextScreen(){
 
-        mNameTextView = findViewById(R.id.username);
-        mBitmojiImageView = findViewById(R.id.imageView2);
-
         String query = "{me{bitmoji{avatar},displayName}}";
 
         SnapLogin.fetchUserData(this, "{me{externalId}}", null, new FetchUserDataCallback() {
@@ -64,9 +62,7 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
                 if (userDataResponse == null || userDataResponse.hasError()) {
                     return;
                 }
-                String mMyExternalId = userDataResponse.getData().getMe().getDisplayName();
-                Button T = findViewById(R.id.datebutton);
-                T.setText(mMyExternalId);
+                mMyExternalId = userDataResponse.getData().getMe().getExternalId();
             }
 
             @Override
@@ -78,7 +74,11 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
 
         setContentView(R.layout.title_page);
 
-        Button T = findViewById(R.id.datebutton);
+        mBitmojiImageView = findViewById(R.id.profileView);
+        Button T = findViewById(R.id.adventureButton);
+
+        mNameTextView.setText(mMyExternalId);
+
         T.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -87,7 +87,7 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
             }
         });
 
-        findViewById(R.id.unlink_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SnapKit.unlink(TitleActivity.this);
