@@ -21,8 +21,6 @@ import com.snapchat.kit.sdk.login.networking.FetchUserDataCallback;
 public class TitleActivity extends Activity implements LoginStateController.OnLoginStateChangedListener {
 
     private ImageView mBitmojiImageView;
-    private TextView mNameTextView;
-    private String mMyExternalId = "AKJFKDFJD";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +60,7 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
                 if (userDataResponse == null || userDataResponse.hasError()) {
                     return;
                 }
-                mMyExternalId = userDataResponse.getData().getMe().getExternalId();
+                String mMyExternalId = userDataResponse.getData().getMe().getExternalId();
             }
 
             @Override
@@ -71,13 +69,10 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
             }
         });
 
-
         setContentView(R.layout.title_page);
 
         mBitmojiImageView = findViewById(R.id.profileView);
         Button T = findViewById(R.id.adventureButton);
-
-        mNameTextView.setText(mMyExternalId);
 
         T.setOnClickListener(new View.OnClickListener() {
 
@@ -93,6 +88,7 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
                 SnapKit.unlink(TitleActivity.this);
             }
         });
+
     }
 
     @Override

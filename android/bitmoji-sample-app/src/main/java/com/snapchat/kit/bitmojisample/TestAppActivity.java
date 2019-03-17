@@ -1,5 +1,6 @@
 package com.snapchat.kit.bitmojisample;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import com.snapchat.kit.sdk.core.controller.LoginStateController;
 import com.snapchat.kit.sdk.login.models.UserDataResponse;
 import com.snapchat.kit.sdk.login.networking.FetchUserDataCallback;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Random;
 
 
@@ -121,6 +124,18 @@ public class TestAppActivity extends AppCompatActivity implements
         handleBitmojiSend(imageUrl, previewDrawable);
     }
 
+
+    private void writeToFile(String data, Context context) {
+        //Alternately we could do text dump of container
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(theme+".txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+        }
+    }
+
     @Override
     public void onLoginSucceeded() {
         loadExternalId();
@@ -198,7 +213,7 @@ public class TestAppActivity extends AppCompatActivity implements
                 if (fragment instanceof BitmojiFragment) {
                     ((BitmojiFragment) fragment).setFriend(friendID);
                     ((BitmojiFragment) fragment).setSearchText(theme);
-                    fragment.getString(0);
+                    //fragment.getString(0);
                 }
             }
         }, delayMs);
