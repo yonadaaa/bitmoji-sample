@@ -45,6 +45,7 @@ public class TestAppActivity extends AppCompatActivity implements
     private int mBitmojiContainerHeight;
     private int mBaseRootViewHeightDiff = 0;
     private String mMyExternalId;
+    private String theme;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,9 +80,13 @@ public class TestAppActivity extends AppCompatActivity implements
             loadExternalId();
         }
 
+        String[] themes = new String[]{"dance","food","party","sleep","music","football","soccer","school","gym","meme"};
+        int index = new Random().nextInt(themes.length);
+        theme = themes[index];
+
         String dancingURL = "https://sdk.bitmoji.com/render/panel/10212299-AWZlaHV3jILgfDP~yNdASBPh1gM19g-AWZlaHV3GUkpI8Rr~8UB38X2weMOyQ-v1.png?transparent=1&palette=1";
         if (Build.VERSION.SDK_INT >= 21) sendMessage(new ChatImageUrlMessage(false /*isFromMe*/, dancingURL, getDrawable(R.drawable.looking_good)));
-        sendMessage(new ChatTextMessage(false /*isFromMe*/, "You and Daniel are dancing!"));
+        sendMessage(new ChatTextMessage(false /*isFromMe*/, "On your Adventure, you and Daniel are going to " + theme +"!"));
 
         delayFilter(2000);
         delayKeyboard(0);
@@ -152,8 +157,8 @@ public class TestAppActivity extends AppCompatActivity implements
         setBitmojiVisible(false);
         sendMessage(new ChatImageUrlMessage(true /*isFromMe*/, imageUrl, previewDrawable));
 
-        sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),5000);
-        delayKeyboard(5500);
+        sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),3000);
+        delayKeyboard(3500);
     }
 
     private void sendMessage(ChatMessage message) {
@@ -179,10 +184,7 @@ public class TestAppActivity extends AppCompatActivity implements
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
                 if (fragment instanceof BitmojiFragment) {
                     ((BitmojiFragment) fragment).setFriend(danielsID);
-                    String[] themes = new String[]{"dance"};
-                    //,"food","walk","party","shower","sex"
-                    int index = new Random().nextInt(themes.length);
-                    ((BitmojiFragment) fragment).setSearchText("dance");
+                    ((BitmojiFragment) fragment).setSearchText(theme);
                     //((BitmojiFragment) fragment).setSearchText(themes[index]);
                 }
             }

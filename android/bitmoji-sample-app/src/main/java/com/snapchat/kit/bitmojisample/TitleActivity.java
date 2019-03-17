@@ -4,19 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Layout;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.snapchat.kit.sdk.SnapKit;
 import com.snapchat.kit.sdk.SnapLogin;
 import com.snapchat.kit.sdk.core.controller.LoginStateController;
+import com.snapchat.kit.sdk.login.models.MeData;
+import com.snapchat.kit.sdk.login.models.UserDataResponse;
+import com.snapchat.kit.sdk.login.networking.FetchUserDataCallback;
 
 public class TitleActivity extends Activity implements LoginStateController.OnLoginStateChangedListener {
+
+    private ImageView mBitmojiImageView;
+    private TextView mNameTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,7 +32,6 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
         } else {
             loginScreen();
         }
-
     }
 
     private void loginScreen(){
@@ -46,7 +50,32 @@ public class TitleActivity extends Activity implements LoginStateController.OnLo
         View mLoginButton = SnapLogin.getButton(getApplicationContext(), linLayout);
         mLoginButton.setY(800);
     }
+
     private void nextScreen(){
+
+        mNameTextView = findViewById(R.id.username);
+        mBitmojiImageView = findViewById(R.id.imageView2);
+
+        String query = "{me{bitmoji{avatar},displayName}}";
+
+        SnapLogin.fetchUserData(this, "{me{externalId}}", null, new FetchUserDataCallback() {
+            @Override
+            public void onSuccess(@Nullable UserDataResponse userDataResponse) {
+                if (userDataResponse == null || userDataResponse.hasError()) {
+                    return;
+                }
+                String mMyExternalId = userDataResponse.getData().getMe().getDisplayName();
+                Button T = findViewById(R.id.datebutton);
+                T.setText(mMyExternalId);
+            }
+
+            @Override
+            public void onFailure(boolean isNetworkError, int statusCode) {
+                // handle error
+            }
+        });
+
+
         setContentView(R.layout.title_page);
 
         Button T = findViewById(R.id.datebutton);
