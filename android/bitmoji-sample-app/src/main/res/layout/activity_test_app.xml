@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Your date with Daniel"
+            android:text="Your Adventure with Daniel"
             android:textColor="@android:color/black"
             android:textSize="@dimen/header_text_size"
             android:textStyle="bold" />
