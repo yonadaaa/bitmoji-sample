@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Doing BitsMoji"
+        android:textColor="@android:color/holo_orange_light"
         android:textSize="30sp" />
 
     <ImageView
@@ -21,13 +22,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        tools:srcCompat="@drawable/kissy" />
+        android:cropToPadding="false"
+        android:src="@drawable/kissy" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/datebutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="TestAppActivity"
         android:text="Go on a Date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/holo_purple" />
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.snapchat.kit.bitmojisample;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,8 +20,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,7 +28,6 @@ import com.snapchat.kit.sdk.SnapLogin;
 import com.snapchat.kit.sdk.bitmoji.OnBitmojiSearchFocusChangeListener;
 import com.snapchat.kit.sdk.bitmoji.OnBitmojiSelectedListener;
 import com.snapchat.kit.sdk.bitmoji.ui.BitmojiFragment;
-import com.snapchat.kit.sdk.bitmoji.ui.BitmojiIconFragment;
 import com.snapchat.kit.bitmojisample.chat.ChatAdapter;
 import com.snapchat.kit.bitmojisample.chat.model.ChatImageMessage;
 import com.snapchat.kit.bitmojisample.chat.model.ChatImageUrlMessage;
@@ -57,7 +55,6 @@ public class TestAppActivity extends AppCompatActivity implements
     private View mContentView;
     private View mBitmojiContainer;
     private View mFriendmojiToggle;
-    private EditText mTextField;
     private RecyclerView mChatView;
 
     private int mBitmojiContainerHeight;
@@ -73,11 +70,8 @@ public class TestAppActivity extends AppCompatActivity implements
 
         setContentView(R.layout.activity_test_app);
 
-        final Button sendButton = findViewById(R.id.send_button);
-
         mContentView = findViewById(R.id.content_view);
         mBitmojiContainer = findViewById(R.id.sdk_container);
-        mTextField = findViewById(R.id.input_field);
         mFriendmojiToggle = findViewById(R.id.friendmoji_toggle);
         mChatView = findViewById(R.id.chat);
         mBitmojiContainerHeight = getResources().getDimensionPixelSize(R.dimen.bitmoji_container_height);
@@ -86,32 +80,7 @@ public class TestAppActivity extends AppCompatActivity implements
         mChatView.setLayoutManager(new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, true /* reverseLayout*/));
         mChatView.setAdapter(mAdapter);
-        mTextField.setOnEditorActionListener(this);
 
-        mTextField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    setBitmojiVisible(true);
-                }
-            }
-        });
-        mTextField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // no-op
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // no-op
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                sendButton.setEnabled(s.length() > 0);
-            }
-        });
         mFriendmojiToggle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,17 +92,12 @@ public class TestAppActivity extends AppCompatActivity implements
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
                 if (fragment instanceof BitmojiFragment) {
                     ((BitmojiFragment) fragment).setFriend(mShowingFriendmoji ? null : danielsID);
-                    String[] themes = new String[]{"dance","food","walk","party","shower","sex"};
+                    String[] themes = new String[]{"dance"};
+                    //,"food","walk","party","shower","sex"
                     int index = new Random().nextInt(themes.length);
                     ((BitmojiFragment) fragment).setSearchText(themes[index]);
                 }
                 mShowingFriendmoji = !mShowingFriendmoji;
-            }
-        });
-        sendButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendText();
             }
         });
         findViewById(R.id.unlink_button).setOnClickListener(new OnClickListener() {
@@ -142,20 +106,10 @@ public class TestAppActivity extends AppCompatActivity implements
                 SnapKit.unlink(TestAppActivity.this);
             }
         });
-        findViewById(R.id.bitmoji_button).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getCurrentFocus() != mTextField) {
-                    setBitmojiVisible(!mIsBitmojiVisible);
-                }
-                defocusInput();
-            }
-        });
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         SnapLogin.getLoginStateController(this).addOnLoginStateChangedListener(this);
         mContentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-        mTextField.requestFocus();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.sdk_container, BitmojiFragment.builder()
@@ -165,20 +119,15 @@ public class TestAppActivity extends AppCompatActivity implements
                         .build())
                 .commit();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.bitmoji_button, new BitmojiIconFragment())
                 .commit();
 
         if (SnapLogin.isUserLoggedIn(this)) {
             loadExternalId();
         }
-        sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "Welcome to Doing BitsMoji!"), 500);
-        sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.kissy),1000);
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.sdk_container);
-        if (fragment instanceof BitmojiFragment) {
-            sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.chill),1000);
-            ((BitmojiFragment) fragment).setSearchText("car");
-        }
+        String dancingURL = "https://sdk.bitmoji.com/render/panel/10212299-AWZlaHV3jILgfDP~yNdASBPh1gM19g-AWZlaHV3GUkpI8Rr~8UB38X2weMOyQ-v1.png?transparent=1&palette=1";
+        if (Build.VERSION.SDK_INT >= 21) sendMessage(new ChatImageUrlMessage(false /*isFromMe*/, dancingURL, getDrawable(R.drawable.looking_good)));
+        sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "You and Daniel are dancing!"),1000);
 
     }
 
@@ -190,7 +139,7 @@ public class TestAppActivity extends AppCompatActivity implements
 
         if (hitRect.contains((int) event.getX(), (int) event.getY())) {
             defocusInput();
-            setBitmojiVisible(false);
+            setBitmojiVisible(true);
         }
         return super.dispatchTouchEvent(event);
     }
@@ -216,6 +165,7 @@ public class TestAppActivity extends AppCompatActivity implements
 
     @Override
     public void onBitmojiSelected(String imageUrl, Drawable previewDrawable) {
+        setBitmojiVisible(false);
         handleBitmojiSend(imageUrl, previewDrawable);
     }
 
@@ -253,7 +203,6 @@ public class TestAppActivity extends AppCompatActivity implements
     @Override
     public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
-            sendText();
             textView.requestFocus();
             return true;
         }
@@ -280,7 +229,7 @@ public class TestAppActivity extends AppCompatActivity implements
 
     private void setBitmojiVisible(boolean isBitmojiVisible) {
         mIsBitmojiVisible = isBitmojiVisible;
-        //mBitmojiContainer.setVisibility(isBitmojiVisible ? View.VISIBLE : View.GONE);
+        mBitmojiContainer.setVisibility(isBitmojiVisible ? View.VISIBLE : View.GONE);
     }
 
     private void defocusInput() {
@@ -296,30 +245,12 @@ public class TestAppActivity extends AppCompatActivity implements
     }
 
     private void handleBitmojiSend(String imageUrl, Drawable previewDrawable) {
+        setBitmojiVisible(false);
         sendMessage(new ChatImageUrlMessage(true /*isFromMe*/, imageUrl, previewDrawable));
 
-        if (mBitmojisSent == 0) {
-            sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "WOAAAAAH, cool car Bitmoji!"), 500);
-            sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),1000);
-        } else if (mBitmojisSent == 1) {
-            sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.party_time),1000);
-        } else if (mBitmojisSent == 2) {
-            sendDelayedMessage(new ChatTextMessage(false /*isFromMe*/, "lol"),500);
-        } else if (mBitmojisSent == 14) {
-            sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.chill), 1000);
-        }
+        sendDelayedMessage(new ChatImageMessage(false /*isFromMe*/, R.drawable.looking_good),5000);
 
         mBitmojisSent++;
-    }
-
-    private void sendText() {
-        String text = mTextField.getText().toString();
-        if (TextUtils.isEmpty(text)) {
-            return;
-        }
-
-        sendMessage(new ChatTextMessage(true /*isFromMe*/, text));
-        mTextField.setText("");
     }
 
     private void sendMessage(ChatMessage message) {
