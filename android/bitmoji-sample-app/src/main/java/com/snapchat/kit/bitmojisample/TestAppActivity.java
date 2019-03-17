@@ -62,7 +62,6 @@ public class TestAppActivity extends AppCompatActivity implements
                 this, LinearLayoutManager.VERTICAL, true /* reverseLayout*/));
         mChatView.setAdapter(mAdapter);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         SnapLogin.getLoginStateController(this).addOnLoginStateChangedListener(this);
         mContentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
@@ -77,7 +76,6 @@ public class TestAppActivity extends AppCompatActivity implements
                 .commit();
 
         if (SnapLogin.isUserLoggedIn(this)) {
-            loadExternalId();
             loadExternalId();
         }
 
